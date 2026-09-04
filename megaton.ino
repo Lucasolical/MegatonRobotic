@@ -16,7 +16,7 @@ const int sensor_esquerda = 13;
 // Valores PwM utilizada no motor:
 const int velocidade = 255;
 const int parado = 0;
-const int semivelocidade = 100;
+// const int semivelocidade = 100;
 
 // Motores que vão para frente:
 const int motorRightFront_Go = 22;
@@ -118,7 +118,20 @@ void loop()
     int esquerda = digitalRead(sensor_esquerda);
     long tempo = 0;
     long distancia = distancia_inimigo();
-    if (esquerda == 0 || direita == 0){ // detectou a borda e vai recuar pra nao sair
+    if (esquerda == 0) // detectou a borda pela esquerda e vai avançar pela direira pra o adversario cair
+    { 
+        girar_direita();
+        ir_frente();
+        
+    }
+    else if (direita == 0) // detectou a borda pela direita e vai avançar pela esquerda pra o adversario cair
+    { 
+        girar_esquerda();
+        ir_frente();
+        
+    }
+    else if (esquerda == 0 && direita == 0) // detectou ambas as bordas e vai recuar pra nao sair
+    {
         ir_tras();
     }
     
