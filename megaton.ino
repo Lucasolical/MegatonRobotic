@@ -1,4 +1,3 @@
-
 unsigned long tempoUltimaLeitura = 0;
 const unsigned long intervaloLeitura = 200; // se precisar testa com 500 ms
 long distanciaAtual = 0;
@@ -31,15 +30,16 @@ const int motorLeftBack_Back = 17;
 
 void setup() {
 // Criação dos canais em seus respectivos pinos:
-    ledcAttach(motorRightFront_Go, 5000, 8);
-    ledcAttach(motorLeftFront_Go, 5000, 8);
-    ledcAttach(motorRightBack_Go, 5000, 8);
-    ledcAttach(motorLeftBack_Go, 5000, 8);
+    // Configuração dos canais PWM
+    pinMode(motorRightFront_Go, OUTPUT);
+    pinMode(motorLeftFront_Go, OUTPUT);
+    pinMode(motorRightBack_Go, OUTPUT);
+    pinMode(motorLeftBack_Go, OUTPUT);
 
-    ledcAttach(motorRightFront_Back, 5000, 8);
-    ledcAttach(motorLeftFront_Back, 5000, 8);
-    ledcAttach(motorRightBack_Back, 5000, 8);
-    ledcAttach(motorLeftBack_Back, 5000, 8);
+    pinMode(motorRightFront_Back, OUTPUT);
+    pinMode(motorLeftFront_Back, OUTPUT);
+    pinMode(motorRightBack_Back, OUTPUT);
+    pinMode(motorLeftBack_Back, OUTPUT);
 
 
     // Sensores:
@@ -67,51 +67,51 @@ int distancia_inimigo()
 }
  
 void ir_frente() {
-    ledcWrite(0, velocidade);
-    ledcWrite(1, velocidade);
-    ledcWrite(2, velocidade);
-    ledcWrite(3, velocidade);
+    analogWrite(motorRightFront_Go, velocidade);
+    analogWrite(motorLeftFront_Go, velocidade);
+    analogWrite(motorRightBack_Go, velocidade);
+    analogWrite(motorLeftBack_Go, velocidade);
 
-    ledcWrite(4, parado);
-    ledcWrite(5, parado);
-    ledcWrite(6, parado);
-    ledcWrite(7, parado);
+    analogWrite(motorRightFront_Back, parado);
+    analogWrite(motorLeftFront_Back, parado);
+    analogWrite(motorRightBack_Back, parado);
+    analogWrite(motorLeftBack_Back, parado);
 }
 
 void ir_tras() {
-    ledcWrite(0, parado);
-    ledcWrite(1, parado);
-    ledcWrite(2, parado);
-    ledcWrite(3, parado);
+    analogWrite(motorRightFront_Go, parado);
+    analogWrite(motorLeftFront_Go, parado);
+    analogWrite(motorRightBack_Go, parado);
+    analogWrite(motorLeftBack_Go, parado);
 
-    ledcWrite(4, velocidade);
-    ledcWrite(5, velocidade);
-    ledcWrite(6, velocidade);
-    ledcWrite(7, velocidade);
+    analogWrite(motorRightFront_Back, velocidade);
+    analogWrite(motorLeftFront_Back, velocidade);
+    analogWrite(motorRightBack_Back, velocidade);
+    analogWrite(motorLeftBack_Back, velocidade);
 }
 
 void girar_direita() {
-    ledcWrite(0, parado);
-    ledcWrite(1, velocidade);
-    ledcWrite(2, parado);
-    ledcWrite(3, velocidade);
+    analogWrite(motorRightFront_Go, parado);
+    analogWrite(motorLeftFront_Go, velocidade);
+    analogWrite(motorRightBack_Go, parado);
+    analogWrite(motorLeftBack_Go, velocidade);
 
-    ledcWrite(4, velocidade);
-    ledcWrite(5, parado);
-    ledcWrite(6, velocidade);
-    ledcWrite(7, parado);
+    analogWrite(motorRightFront_Back, velocidade);
+    analogWrite(motorLeftFront_Back, parado);
+    analogWrite(motorRightBack_Back, velocidade);
+    analogWrite(motorLeftBack_Back, parado);
 }
 
 void girar_esquerda() {
-    ledcWrite(0, velocidade);
-    ledcWrite(1, parado);
-    ledcWrite(2, velocidade);
-    ledcWrite(3, parado);
+    analogWrite(motorRightFront_Go, velocidade);
+    analogWrite(motorLeftFront_Go, parado);
+    analogWrite(motorRightBack_Go, velocidade);
+    analogWrite(motorLeftBack_Go, parado);
 
-    ledcWrite(4, parado);
-    ledcWrite(5, velocidade);
-    ledcWrite(6, parado);
-    ledcWrite(7, velocidade);
+    analogWrite(motorRightFront_Back, parado);
+    analogWrite(motorLeftFront_Back, velocidade);
+    analogWrite(motorRightBack_Back, parado);
+    analogWrite(motorLeftBack_Back, velocidade);
 }
 
 void loop()
