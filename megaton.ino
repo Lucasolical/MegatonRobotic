@@ -3,11 +3,9 @@ unsigned long tempoUltimaLeitura = 0;
 const unsigned long intervaloLeitura = 200; // se precisar testa com 500 ms
 long distanciaAtual = 0;
 
-
 //Sensor ultrassônico:
 const int pin_echo = 15; // INPUT
 const int pin_trig = 2; // OUTPUT
-
 
 // Sensores infravermelhos:
 const int sensor_direita = 23;
@@ -30,20 +28,24 @@ const int motorLeftFront_Back = 16;
 const int motorRightBack_Back = 19;
 const int motorLeftBack_Back = 17;
 
+
 void setup() {
 // Criação dos canais em seus respectivos pinos:
     for (int i = 0; i < 8; i++)
     {
         ledcSetup(i, 5000, 8);
     }
+
     ledcAttachPin(motorRightFront_Go, 0);
     ledcAttachPin(motorLeftFront_Go, 1);
     ledcAttachPin(motorRightBack_Go, 2);
     ledcAttachPin(motorLeftBack_Go, 3);
+
     ledcAttachPin(motorRightFront_Back, 4);
     ledcAttachPin(motorLeftFront_Back, 5);
     ledcAttachPin(motorRightBack_Back, 6);
     ledcAttachPin(motorLeftBack_Back, 7);
+
     // Sensores:
     Serial.begin(9600);
     pinMode(sensor_direita, INPUT);
@@ -73,6 +75,7 @@ void ir_frente() {
     ledcWrite(1, velocidade);
     ledcWrite(2, velocidade);
     ledcWrite(3, velocidade);
+
     ledcWrite(4, parado);
     ledcWrite(5, parado);
     ledcWrite(6, parado);
@@ -84,6 +87,7 @@ void ir_tras() {
     ledcWrite(1, parado);
     ledcWrite(2, parado);
     ledcWrite(3, parado);
+
     ledcWrite(4, velocidade);
     ledcWrite(5, velocidade);
     ledcWrite(6, velocidade);
@@ -95,6 +99,7 @@ void girar_direita() {
     ledcWrite(1, velocidade);
     ledcWrite(2, parado);
     ledcWrite(3, velocidade);
+
     ledcWrite(4, velocidade);
     ledcWrite(5, parado);
     ledcWrite(6, velocidade);
@@ -106,6 +111,7 @@ void girar_esquerda() {
     ledcWrite(1, parado);
     ledcWrite(2, velocidade);
     ledcWrite(3, parado);
+
     ledcWrite(4, parado);
     ledcWrite(5, velocidade);
     ledcWrite(6, parado);
@@ -118,6 +124,7 @@ void loop()
     int esquerda = digitalRead(sensor_esquerda);
     long tempo = 0;
     long distancia = distancia_inimigo();
+    
     if (esquerda == 0) // detectou a borda pela esquerda e vai avançar pela direira pra o adversario cair
     { 
         girar_direita();
@@ -135,7 +142,8 @@ void loop()
         ir_tras();
     }
     
-    if (distancia <= 60)
+    
+    if (distancia <= 60) // (distancia >0 && distancia <= 60) // sugeriram pra gnt se com esse limite no 0 ia funcionar bem tbm
     {
         ir_frente();
     }
