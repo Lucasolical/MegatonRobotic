@@ -1,6 +1,6 @@
 
 unsigned long tempoUltimaLeitura = 0;
-const unsigned long intervaloLeitura = 200; // 500 ms
+const unsigned long intervaloLeitura = 200; // se precisar testa com 500 ms
 long distanciaAtual = 0;
 
 
@@ -52,9 +52,10 @@ void setup() {
     pinMode(pin_trig, OUTPUT);
 } 
 
-int distancia_inimigo() {
+int distancia_inimigo() 
+{
     unsigned long agora = millis();
-    if (agora - tempoUltimaLeitura >= intervaloLeitura)
+    if (agora - tempoUltimaLeitura >= intervaloLeitura){
         tempoUltimaLeitura = agora;
         digitalWrite(pin_trig, LOW);
         delayMicroseconds(2);
@@ -64,6 +65,7 @@ int distancia_inimigo() {
         long duracao = pulseIn(pin_echo, HIGH, 30000); // timeout de 30ms
         distanciaAtual = duracao * 0.034 / 2;
         return distanciaAtual;
+    }
 }
  
 void ir_frente() {
@@ -116,12 +118,13 @@ void loop()
     int esquerda = digitalRead(sensor_esquerda);
     long tempo = 0;
     long distancia = distancia_inimigo();
-    girar_direita();
+    if (esquerda == 0 || direita == 0){ // detectou a borda e vai recuar pra nao sair
+        ir_tras();
+    }
+    
     if (distancia <= 60)
     {
         ir_frente();
-        if (esquerda == 0 || direita == 0){ // detectou a borda e vai recuar pra nao sair
-            ir_tras();
-        }
     }
+    girar_direita();
 }
