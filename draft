@@ -1,0 +1,28 @@
+int distancia_inimigo() 
+{
+    unsigned long agora = millis();
+
+    if (agora - tempoUltimaLeitura >= intervaloLeitura)
+    {
+        tempoUltimaLeitura = agora;
+
+        digitalWrite(pin_trig, LOW);
+        delayMicroseconds(2);
+
+        digitalWrite(pin_trig, HIGH);
+        delayMicroseconds(10);
+
+        digitalWrite(pin_trig, LOW);
+
+        long duracao = pulseIn(pin_echo, HIGH, 30000);
+
+        if (duracao == 0)
+        {
+            return distanciaAtual;
+        }
+
+        distanciaAtual = duracao * 0.034 / 2;
+    }
+
+    return distanciaAtual;
+}
