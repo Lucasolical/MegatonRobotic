@@ -31,20 +31,16 @@ const int motorLeftBack_Back = 17;
 
 void setup() {
 // Criação dos canais em seus respectivos pinos:
-    for (int i = 0; i < 8; i++)
-    {
-        ledcSetup(i, 5000, 8);
-    }
+    ledcAttach(motorRightFront_Go, 5000, 8);
+    ledcAttach(motorLeftFront_Go, 5000, 8);
+    ledcAttach(motorRightBack_Go, 5000, 8);
+    ledcAttach(motorLeftBack_Go, 5000, 8);
 
-    ledcAttachPin(motorRightFront_Go, 0);
-    ledcAttachPin(motorLeftFront_Go, 1);
-    ledcAttachPin(motorRightBack_Go, 2);
-    ledcAttachPin(motorLeftBack_Go, 3);
+    ledcAttach(motorRightFront_Back, 5000, 8);
+    ledcAttach(motorLeftFront_Back, 5000, 8);
+    ledcAttach(motorRightBack_Back, 5000, 8);
+    ledcAttach(motorLeftBack_Back, 5000, 8);
 
-    ledcAttachPin(motorRightFront_Back, 4);
-    ledcAttachPin(motorLeftFront_Back, 5);
-    ledcAttachPin(motorRightBack_Back, 6);
-    ledcAttachPin(motorLeftBack_Back, 7);
 
     // Sensores:
     Serial.begin(9600);
