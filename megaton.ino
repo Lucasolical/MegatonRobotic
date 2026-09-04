@@ -5,8 +5,8 @@ long distanciaAtual = 0;
 
 
 //Sensor ultrassônico:
-const int pin_echo = 15;
-const int pin_trig = 2;
+const int pin_echo = 15; // INPUT
+const int pin_trig = 2; // OUTPUT
 
 
 // Sensores infravermelhos:
@@ -120,7 +120,7 @@ void loop()
     if (distancia <= 60)
     {
         ir_frente();
-        if (esquerda == 0 || direita == 0){
+        if (esquerda == 0 || direita == 0){ // detectou a borda e vai recuar pra nao sair
             ir_tras();
         }
     }
