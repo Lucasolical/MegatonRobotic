@@ -1,6 +1,6 @@
 unsigned long tempoUltimaLeitura = 0;
-const unsigned long intervaloLeitura = 200; // se precisar testa com 500 ms
-long distanciaAtual = 0;
+const unsigned long intervaloLeitura = 50; // 200 é como tava antes
+long distanciaAtual = 999; // valor padrão distante
 
 //Sensor ultrassônico:
 const int pin_echo = 15; // INPUT
@@ -13,7 +13,6 @@ const int sensor_esquerda = 13;
 // Valores PwM utilizada no motor:
 const int velocidade = 255;
 const int parado = 0;
-// const int semivelocidade = 100;
 
 // Motores que vão para frente:
 const int motorRightFront_Go = 22;
@@ -50,7 +49,7 @@ void setup() {
     pinMode(pin_trig, OUTPUT);
 } 
 
-int distancia_inimigo() 
+long distancia_inimigo()
 {
     unsigned long agora = millis();
     if (agora - tempoUltimaLeitura >= intervaloLeitura){
@@ -60,12 +59,18 @@ int distancia_inimigo()
         digitalWrite(pin_trig, HIGH);
         delayMicroseconds(10);
         digitalWrite(pin_trig, LOW);
+        
         long duracao = pulseIn(pin_echo, HIGH, 30000); // timeout de 30ms
-        distanciaAtual = duracao * 0.034 / 2;
-        return distanciaAtual;
+        
+        if (duracao == 0) {
+            distanciaAtual = 999; // sem alvo detectado
+        } else {
+            distanciaAtual = duracao * 0.034 / 2;
+        }
     }
+    return distanciaAtual; // retorna o último valor lido válido
 }
- 
+
 void ir_frente() {
     analogWrite(motorRightFront_Go, velocidade);
     analogWrite(motorLeftFront_Go, velocidade);
@@ -114,34 +119,48 @@ void girar_esquerda() {
     analogWrite(motorLeftBack_Back, velocidade);
 }
 
-void loop()
-{
+void loop() {
     int direita = digitalRead(sensor_direita);
     int esquerda = digitalRead(sensor_esquerda);
-    long tempo = 0;
     long distancia = distancia_inimigo();
-    
-    if (esquerda == 0) // detectou a borda pela esquerda e vai avançar pela direira pra o adversario cair
-    { 
-        girar_direita();
-        ir_frente();
-        
-    }
-    else if (direita == 0) // detectou a borda pela direita e vai avançar pela esquerda pra o adversario cair
-    { 
-        girar_esquerda();
-        ir_frente();
-        
-    }
-    else if (esquerda == 0 && direita == 0) // detectou ambas as bordas e vai recuar pra nao sair
-    {
+
+    if (esquerda == 0 && direita == 0) {
         ir_tras();
-    }
-    
-    
-    if (distancia <= 60) // (distancia >0 && distancia <= 60) // sugeriram pra gnt se com esse limite no 0 ia funcionar bem tbm
-    {
+        delay(400);
+    } 
+
+    else if (esquerda == 0) {  // detectou a borda pela esquerda e vai avançar pela direira pra o adversario cair
+        girar_direita();
+        delay(150);
+        
         ir_frente();
+        delay(250);
+        
+        // Verifica se ainda está no limite após o ataque antes de recuar
+        if (digitalRead(sensor_esquerda) == 0 || digitalRead(sensor_direita) == 0) { //recua pq chegou na borda
+            ir_tras();
+            delay(300);
+        }
+    } 
+
+    else if (direita == 0) {  // detectou a borda pela direita e vai avançar pela esquerda pra o adversario cair
+        girar_esquerda();
+        delay(150);
+        
+        ir_frente();
+        delay(250);
+        
+        if (digitalRead(sensor_esquerda) == 0 || digitalRead(sensor_direita) == 0) { //recua pq chegou na borda
+            ir_tras();
+            delay(300);
+        }
+    } 
+    
+    else { // busca e ataque normal
+        if (distancia > 0 && distancia <= 60) {
+            ir_frente(); // ataca
+        } else {
+            girar_direita(); // procura
+        }
     }
-    girar_direita();
 }
