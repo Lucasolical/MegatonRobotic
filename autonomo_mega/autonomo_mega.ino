@@ -15,16 +15,16 @@ const int velocidade = 255;
 const int parado = 0;
 
 // Motores que vão para frente:
-const int motorRightFront_Go = 22;
-const int motorLeftFront_Go = 4;
-const int motorRightBack_Go = 18;
-const int motorLeftBack_Go = 5;
+const int motorRightFront_Go = 21;
+const int motorLeftFront_Go = 16;
+const int motorRightBack_Go = 19;
+const int motorLeftBack_Go = 17;
 
 // Motores que vão para trás:
-const int motorRightFront_Back = 21;
-const int motorLeftFront_Back = 16;
-const int motorRightBack_Back = 19;
-const int motorLeftBack_Back = 17;
+const int motorRightFront_Back = 22;
+const int motorLeftFront_Back = 4;
+const int motorRightBack_Back = 18;
+const int motorLeftBack_Back = 5;
 
 
 void setup() {
@@ -39,7 +39,7 @@ void setup() {
     pinMode(motorLeftFront_Back, OUTPUT);
     pinMode(motorRightBack_Back, OUTPUT);
     pinMode(motorLeftBack_Back, OUTPUT);
-
+    
 
     // Sensores:
     Serial.begin(9600);
@@ -81,42 +81,30 @@ long distancia_inimigo()
 }
 
 void ir_frente() {
-    analogWrite(motorRightFront_Go, velocidade);
-    analogWrite(motorLeftFront_Go, velocidade);
-    analogWrite(motorRightBack_Go, velocidade);
-    analogWrite(motorLeftBack_Go, velocidade);
+    analogWrite(motorRightFront_Go, parado);
+    analogWrite(motorLeftFront_Go, parado);
+    analogWrite(motorRightBack_Go, parado);
+    analogWrite(motorLeftBack_Go, parado);
 
-    analogWrite(motorRightFront_Back, parado);
-    analogWrite(motorLeftFront_Back, parado);
-    analogWrite(motorRightBack_Back, parado);
-    analogWrite(motorLeftBack_Back, parado);
+    analogWrite(motorRightFront_Back, velocidade);
+    analogWrite(motorLeftFront_Back, velocidade);
+    analogWrite(motorRightBack_Back, velocidade);
+    analogWrite(motorLeftBack_Back, velocidade); 
 }
 
 void ir_tras() {
-    analogWrite(motorRightFront_Go, parado);
-    analogWrite(motorLeftFront_Go, parado);
-    analogWrite(motorRightBack_Go, parado);
-    analogWrite(motorLeftBack_Go, parado);
-
-    analogWrite(motorRightFront_Back, velocidade);
-    analogWrite(motorLeftFront_Back, velocidade);
-    analogWrite(motorRightBack_Back, velocidade);
-    analogWrite(motorLeftBack_Back, velocidade);
-}
-
-void girar_direita() {
-    analogWrite(motorRightFront_Go, parado);
+    analogWrite(motorRightFront_Go, velocidade);
     analogWrite(motorLeftFront_Go, velocidade);
-    analogWrite(motorRightBack_Go, parado);
+    analogWrite(motorRightBack_Go, velocidade);
     analogWrite(motorLeftBack_Go, velocidade);
 
-    analogWrite(motorRightFront_Back, velocidade);
+    analogWrite(motorRightFront_Back, parado);
     analogWrite(motorLeftFront_Back, parado);
-    analogWrite(motorRightBack_Back, velocidade);
+    analogWrite(motorRightBack_Back, parado);
     analogWrite(motorLeftBack_Back, parado);
 }
 
-void girar_esquerda() {
+void girar_direita() {
     analogWrite(motorRightFront_Go, velocidade);
     analogWrite(motorLeftFront_Go, parado);
     analogWrite(motorRightBack_Go, velocidade);
@@ -126,6 +114,18 @@ void girar_esquerda() {
     analogWrite(motorLeftFront_Back, velocidade);
     analogWrite(motorRightBack_Back, parado);
     analogWrite(motorLeftBack_Back, velocidade);
+}
+
+void girar_esquerda() {
+    analogWrite(motorRightFront_Go, parado);
+    analogWrite(motorLeftFront_Go, velocidade);
+    analogWrite(motorRightBack_Go, parado);
+    analogWrite(motorLeftBack_Go, velocidade);
+
+    analogWrite(motorRightFront_Back, velocidade);
+    analogWrite(motorLeftFront_Back, parado);
+    analogWrite(motorRightBack_Back, velocidade);
+    analogWrite(motorLeftBack_Back, parado);
 }
 
 void loop() {
@@ -135,33 +135,33 @@ void loop() {
 
     if (esquerda == 0 && direita == 0) {
         ir_tras();
-        delay(400);
+        //delay(400);
     } 
 
     else if (esquerda == 0) {  // detectou a borda pela esquerda e vai avançar pela direira pra o adversario cair
         girar_direita();
-        delay(150);
+        //delay(150);
         
         ir_frente();
-        delay(250);
+        //delay(250);
         
         // Verifica se ainda está no limite após o ataque antes de recuar
         if (digitalRead(sensor_esquerda) == 0 || digitalRead(sensor_direita) == 0) { //recua pq chegou na borda
             ir_tras();
-            delay(300);
+            //delay(300);
         }
     } 
 
     else if (direita == 0) {  // detectou a borda pela direita e vai avançar pela esquerda pra o adversario cair
         girar_esquerda();
-        delay(150);
+        //delay(150);
         
         ir_frente();
-        delay(250);
+        //delay(250);
         
         if (digitalRead(sensor_esquerda) == 0 || digitalRead(sensor_direita) == 0) { //recua pq chegou na borda
             ir_tras();
-            delay(300);
+            //delay(300);
         }
     } 
     
