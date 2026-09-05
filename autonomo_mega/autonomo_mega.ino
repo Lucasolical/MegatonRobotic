@@ -49,26 +49,35 @@ void setup() {
     pinMode(pin_trig, OUTPUT);
 } 
 
-long distancia_inimigo()
+
+long distancia_inimigo() 
 {
     unsigned long agora = millis();
-    if (agora - tempoUltimaLeitura >= intervaloLeitura){
+
+    if (agora - tempoUltimaLeitura >= intervaloLeitura) // Executa a leitura apenas se o tempo de intervalo tiver passado
+    {
         tempoUltimaLeitura = agora;
+
+        // Pulso do ultrassônico
         digitalWrite(pin_trig, LOW);
         delayMicroseconds(2);
         digitalWrite(pin_trig, HIGH);
         delayMicroseconds(10);
         digitalWrite(pin_trig, LOW);
-        
-        long duracao = pulseIn(pin_echo, HIGH, 30000); // timeout de 30ms
-        
-        if (duracao == 0) {
-            distanciaAtual = 999; // sem alvo detectado
-        } else {
-            distanciaAtual = duracao * 0.034 / 2;
+
+        long duracao = pulseIn(pin_echo, HIGH, 30000); // Mede o tempo de resposta
+
+        if (duracao == 0) // Se der timeout, não há nada no alcance
+        {
+            distanciaAtual = 999; // aq ele manda girar dnv pra procurar
+        } 
+        else 
+        {
+            distanciaAtual = duracao * 0.034 / 2; // Calcula a distância em cm
         }
     }
-    return distanciaAtual; // retorna o último valor lido válido
+
+    return distanciaAtual;
 }
 
 void ir_frente() {
