@@ -18,7 +18,7 @@ const int parado        = 0;
 
 // PINAGEM DOS MOTORES
 const int roda_DirFrente_Go   = 21; 
-const intf roda_DirFrente_Back = 22; 
+const int roda_DirFrente_Back = 22; 
 
 const int roda_DirTras_Go     = 19; 
 const int roda_DirTras_Back   = 18; 
